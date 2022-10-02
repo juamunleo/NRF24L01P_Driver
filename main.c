@@ -41,7 +41,7 @@
     SOFTWARE.
  */
 
-#include "nrf24l01p.h"
+#include "controller.h"
 
 /*
                          Main application
@@ -66,10 +66,15 @@ void main(void)
     // Disable the Peripheral Interrupts
     //INTERRUPT_PeripheralInterruptDisable();
 
-    while (1)
-    {
-        // Add your application code
-}
+    //radio_init(TX);
+    //radio_power_up();
+    
+    while (1){
+        LED_SetHigh();
+        __delay_ms(1000);
+        LED_SetLow();
+        __delay_ms(1000);
+    }
 }
 /**
  End of File

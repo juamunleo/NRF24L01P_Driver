@@ -3479,23 +3479,7 @@
          <value>OFF</value>
       </entry>
    </tokenMap>
-   <generatedFileHashHistoryMap class="java.util.HashMap">
-      <entry>
-         <file>mcc_generated_files\mcc.h</file>
-         <hash>b6ff6357b149dac6d310b35c6183a8d98756b5f628971e7ad38a18d9a14bbbf6</hash>
-      </entry>
-      <entry>
-         <file>mcc_generated_files\device_config.h</file>
-         <hash>3c2d4019ee9df8bde0c3c7f95dacdbde957e9c85865750c10760417ba40557f2</hash>
-      </entry>
-      <entry>
-         <file>mcc_generated_files\spi.c</file>
-         <hash>90676c20f2b30905931516fad24b61a86d29dd774a07b8af704dd9b0783b68d7</hash>
-      </entry>
-      <entry>
-         <file>mcc_generated_files\spi.h</file>
-         <hash>a616bf9a2112975dce0d2cca5479c21e84f8edf6a5482e9a0de6786adb70666a</hash>
-      </entry>
+   <generatedFileHashHistoryMap class="java.util.TreeMap">
       <entry>
          <file>main.c</file>
          <hash>d3b5d4e57f06f521dee0581e077f78a097d58e9e549f45f3e87e8601bf52205f</hash>
@@ -3505,16 +3489,32 @@
          <hash>58b115a6cbbda67ad57fe4460f25b655185e68555302eb4ab233f627d33af66a</hash>
       </entry>
       <entry>
-         <file>mcc_generated_files\pin_manager.h</file>
-         <hash>4786234c0622651314b200ae5684fa9e7ce6553302759fc866ae5a194dd361e7</hash>
+         <file>mcc_generated_files\device_config.h</file>
+         <hash>3c2d4019ee9df8bde0c3c7f95dacdbde957e9c85865750c10760417ba40557f2</hash>
       </entry>
       <entry>
          <file>mcc_generated_files\mcc.c</file>
          <hash>5f5135660252c65e6698110eb2ca8addd16d712aab71487893d26b796bf419bd</hash>
       </entry>
       <entry>
+         <file>mcc_generated_files\mcc.h</file>
+         <hash>b6ff6357b149dac6d310b35c6183a8d98756b5f628971e7ad38a18d9a14bbbf6</hash>
+      </entry>
+      <entry>
          <file>mcc_generated_files\pin_manager.c</file>
          <hash>5b8b2765c767aba95c7ea54157f7815038a4d8978ca1001fe377f61f61e396b1</hash>
+      </entry>
+      <entry>
+         <file>mcc_generated_files\pin_manager.h</file>
+         <hash>4786234c0622651314b200ae5684fa9e7ce6553302759fc866ae5a194dd361e7</hash>
+      </entry>
+      <entry>
+         <file>mcc_generated_files\spi.c</file>
+         <hash>90676c20f2b30905931516fad24b61a86d29dd774a07b8af704dd9b0783b68d7</hash>
+      </entry>
+      <entry>
+         <file>mcc_generated_files\spi.h</file>
+         <hash>a616bf9a2112975dce0d2cca5479c21e84f8edf6a5482e9a0de6786adb70666a</hash>
       </entry>
    </generatedFileHashHistoryMap>
 </config>
