@@ -3,8 +3,14 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/Juan%20Manuel/Documents/GitHub/NRF24L01P_Driver.X/controller.c</file>
-            <file>file:/C:/Users/Juan%20Manuel/Documents/GitHub/NRF24L01P_Driver.X/main.c</file>
+            <file>file:/C:/Users/Juan%20Manuel/Documents/Git/NRF24L01P_Driver.X/nrf24l01p.c</file>
+            <file>file:/C:/Users/Juan%20Manuel/Documents/Git/NRF24L01P_Driver.X/mcc_generated_files/spi.c</file>
+            <file>file:/C:/Users/Juan%20Manuel/Documents/Git/NRF24L01P_Driver.X/main.c</file>
+            <file>file:/C:/Users/Juan%20Manuel/Documents/Git/NRF24L01P_Driver.X/driver.c</file>
+            <file>file:/C:/Users/Juan%20Manuel/Documents/Git/NRF24L01P_Driver.X/driver.h</file>
+            <file>file:/C:/Users/Juan%20Manuel/Documents/Git/NRF24L01P_Driver.X/nrf24l01p.h</file>
+            <file>file:/C:/Users/Juan%20Manuel/Documents/Git/NRF24L01P_Driver.X/program_types.h</file>
+            <file>file:/C:/Users/Juan%20Manuel/Documents/Git/NRF24L01P_Driver.X/main.h</file>
         </group>
     </open-files>
 </project-private>
