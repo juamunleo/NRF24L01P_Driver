@@ -12,13 +12,13 @@
 extern "C" {
 #endif
     
+#include "program_types.h"
+    
 #define SPI_ON CSN_SetLow
 #define SPI_OFF CSN_SetHigh
 #define CE_HIGH CE_SetHigh
 #define CE_LOW CE_SetLow
 #define SPI_EXCHANGE_BYTE SPI_ExchangeByte
-
-#include "program_types.h"
     
 //Register Map Address
 #define NRF_CONFIG_ADDR  0x00
@@ -75,7 +75,7 @@ extern "C" {
 #define RF_PWR_0dbm     0b11
     
     
-    enum radioMode_t{TX,RX};
+    enum RadioMode_t{TX,RX};
     
     void R_Register(uint8_t register_address, DataBytes_t * data_bytes);
     void W_Register(uint8_t register_address, DataBytes_t data_bytes);

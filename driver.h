@@ -13,66 +13,73 @@ extern "C" {
 #endif
     
 #include "nrf24l01p.h"
-   
-static NRF_CONFIG_R NRF_CONFIG;
+#include <stdbool.h>
 
-static EN_AA_R EN_AA;
+typedef struct {
+    NRF_CONFIG_R NRF_CONFIG;
 
-static EN_RXADDR_R EN_RXADDR;
+    EN_AA_R EN_AA;
 
-static SETUP_AW_R SETUP_AW;
+    EN_RXADDR_R EN_RXADDR;
 
-static SETUP_RETR_R SETUP_RETR;
+    SETUP_AW_R SETUP_AW;
 
-static RF_CH_R RF_CH;
+    SETUP_RETR_R SETUP_RETR;
 
-static RF_SETUP_R RF_SETUP;
+    RF_CH_R RF_CH;
 
-static STATUS_R NRF_STATUS;
+    RF_SETUP_R RF_SETUP;
 
-static OBSERVE_TX_R OBSERVE_TX;
+    STATUS_R NRF_STATUS;
 
-static RPD_R RPD;
+    OBSERVE_TX_R OBSERVE_TX;
 
-static RX_ADDR_P0_R RX_ADDR_P0;
+    RPD_R RPD;
 
-static RX_ADDR_P1_R RX_ADDR_P1;
+    RX_ADDR_P0_R RX_ADDR_P0;
 
-static uint8_t RX_ADDR_P2;
+    RX_ADDR_P1_R RX_ADDR_P1;
 
-static uint8_t RX_ADDR_P3;
+    uint8_t RX_ADDR_P2;
 
-static uint8_t RX_ADDR_P4;
+    uint8_t RX_ADDR_P3;
 
-static uint8_t RX_ADDR_P5;
+    uint8_t RX_ADDR_P4;
 
-static TX_ADDR_R TX_ADDR;
+    uint8_t RX_ADDR_P5;
 
-static RX_PW_P0_R RX_PW_P0;
+    TX_ADDR_R TX_ADDR;
 
-static RX_PW_P1_R RX_PW_P1;
+    RX_PW_P0_R RX_PW_P0;
 
-static RX_PW_P2_R RX_PW_P2;
+    RX_PW_P1_R RX_PW_P1;
 
-static RX_PW_P3_R RX_PW_P3;
+    RX_PW_P2_R RX_PW_P2;
 
-static RX_PW_P4_R RX_PW_P4;
+    RX_PW_P3_R RX_PW_P3;
 
-static RX_PW_P5_R RX_PW_P5;
+    RX_PW_P4_R RX_PW_P4;
 
-static FIFO_STATUS_R FIFO_STATUS;
+    RX_PW_P5_R RX_PW_P5;
 
-static DYNPD_R DYNPD;
+    FIFO_STATUS_R FIFO_STATUS;
 
-static FEATURE_R FEATURE;
+    DYNPD_R DYNPD;
 
-void radio_power_up(void);
-void radio_init(enum radioMode_t mode);
-Payload_t initPayload(void);
-void sendBytes(Payload_t payloadInfo);
+    FEATURE_R FEATURE;
+}Radio_t;
+
+void radio_powerUp(Radio_t * radio);
+Radio_t radio_init(void);
+Payload_t initPayload(uint8_t size, ...);
+void sendBytes(Radio_t * radio, Payload_t payloadInfo);
 Payload_t receiveBytes(uint8_t size);
-bool checkFIFO(void);
-void checkAll(void);
+DataBytes_t initDataBytes(uint8_t size, ...);
+bool checkFIFO(Radio_t * radio);
+void radio_openWritingPipe(Radio_t * radio, DataBytes_t address);
+void radio_openReadingPipe(Radio_t * radio, uint8_t pipe, uint8_t bytesToReceive, DataBytes_t address);
+void radio_setChannel(Radio_t * radio, uint8_t channel);
+void radio_startRx(Radio_t * radio);
 
 #ifdef	__cplusplus
 }

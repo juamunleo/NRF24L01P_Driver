@@ -43,10 +43,11 @@
 
 #include "main.h"
 #include "driver.h"
+#include "mcc_generated_files/mcc.h"
 
 #define RADIO_TX 0
 #define RADIO_RX 1
-#define RADIO_MODE RADIO_RX
+#define RADIO_MODE RADIO_TX
 /*
                          Main application
  */
@@ -83,17 +84,22 @@ void main(void)
 
 #if RADIO_MODE == RADIO_RX
 void rx_function(void){
-    Payload_t payload;
+    Payload_t payload = initPayload();
     uint8_t data, ref = 0, lastRef;
     
-    radio_init(RX);
-    radio_power_up();
+    Radio_t radio = radio_init();
+    radio_setChannel(&radio, 5);
+    
+    radio_openReadingPipe(&radio, 0, 2, initDataBytes(5, 0xEF, 0xAB, 0xC8, 0xF3, 0xD7));
+    radio_powerUp(&radio);
+    
     LED_SetHigh();
     __delay_ms(500);
     LED_SetLow();
-    CE_SetHigh();
+    
+    radio_startRx(&radio);
     while(1){
-        if(checkFIFO()){
+        if(checkFIFO(&radio)){
             payload = receiveBytes(2);
             data = payload.bytes[0];
             ref = payload.bytes[1];
@@ -113,25 +119,23 @@ void rx_function(void){
 #else
 void tx_function(void){
     uint8_t ref = 1;
-    Payload_t payloadInfo = initPayload();
+    Payload_t payloadInfo = initPayload(2, 0xAA, 0);
     
-    payloadInfo.payload_size = 2;
-    payloadInfo.bytes[0] = 0xAA;
-    
-    radio_init(TX);
-    radio_power_up();
+    Radio_t radio = radio_init();
+    radio_setChannel(&radio, 5);
+    radio_openWritingPipe(&radio, initDataBytes(5, 0xEF, 0xAB, 0xC8, 0xF3, 0xD7));
+    radio_powerUp(&radio);
     interrupted = false;
     LED_SetHigh();
     __delay_ms(300);
     LED_SetLow();
-    
     while(1){
         if(interrupted){
             LED_SetHigh();
             ref++;
             payloadInfo.bytes[1] = ref;
             while(!BUTTON_GetValue()){ 
-                sendBytes(payloadInfo);
+                sendBytes(&radio, payloadInfo);
             }
             interrupted = false;
             LED_SetLow();

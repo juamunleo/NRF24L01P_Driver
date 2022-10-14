@@ -12,14 +12,14 @@
 extern "C" {
 #endif
 
-#include "mcc_generated_files/mcc.h"
+#include <stdint.h>
     
     typedef struct {
         uint8_t bytes[5];
         uint8_t data_size;
     }DataBytes_t;
     
-    typedef struct{
+    typedef struct {
         uint8_t bytes[32];
         uint8_t payload_size;
     }Payload_t;
