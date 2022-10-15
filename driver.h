@@ -13,8 +13,14 @@ extern "C" {
 #endif
     
 #include "nrf24l01p.h"
+#include "mcc_generated_files/tmr5.h"
 #include <stdbool.h>
 
+#define TIMEOUT_TIMER_RELOAD TMR5_Reload
+#define TIMEOUT_TIMER_IF TMR5IF
+#define TIMEOUT_TIMER_STOP TMR5_StopTimer
+#define TIMEOUT_TIMER_START TMR5_StartTimer
+    
 typedef struct {
     NRF_CONFIG_R NRF_CONFIG;
 
@@ -70,6 +76,7 @@ typedef struct {
 }Radio_t;
 
 void radio_powerUp(Radio_t * radio);
+void radio_powerOff(Radio_t * radio);
 Radio_t radio_init(void);
 Payload_t initPayload(uint8_t size, ...);
 void sendBytes(Radio_t * radio, Payload_t payloadInfo);
@@ -80,6 +87,8 @@ void radio_openWritingPipe(Radio_t * radio, DataBytes_t address);
 void radio_openReadingPipe(Radio_t * radio, uint8_t pipe, uint8_t bytesToReceive, DataBytes_t address);
 void radio_setChannel(Radio_t * radio, uint8_t channel);
 void radio_startRx(Radio_t * radio);
+void radio_enableTX_DS(Radio_t * radio);
+void radio_clearInterrupts(void);
 
 #ifdef	__cplusplus
 }

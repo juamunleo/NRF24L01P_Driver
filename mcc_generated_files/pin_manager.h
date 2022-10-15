@@ -52,7 +52,6 @@
 */
 
 #include <xc.h>
-#include "../main.h"
 
 #define INPUT   1
 #define OUTPUT  0

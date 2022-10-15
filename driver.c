@@ -4,9 +4,11 @@
 
 Radio_t radio_init(void){
     Radio_t radio;
-    DataBytes_t data_bytes;
     
     //CONFIG
+    radio.NRF_CONFIG.MASK_RX_DR = 1;
+    radio.NRF_CONFIG.MASK_MAX_RT = 1;
+    radio.NRF_CONFIG.MASK_TX_DS = 1;
     radio.NRF_CONFIG.EN_CRC = 1;
     radio.NRF_CONFIG.CRCO = 1;
     
@@ -33,21 +35,15 @@ Radio_t radio_init(void){
     radio.RF_SETUP.RF_DR_HIGH = 1;
     radio.RF_SETUP.RF_PWR = RF_PWR_0dbm;
     
-    //Initialize config register
-    data_bytes.bytes[0] = radio.NRF_CONFIG.byte;
-    data_bytes.data_size = 1;
+    //config register    
+    W_Register(NRF_CONFIG_ADDR, initDataBytes(1, radio.NRF_CONFIG.byte));
     
-    W_Register(NRF_CONFIG_ADDR, data_bytes);
-    
-    //Initialize RETR
-    data_bytes.bytes[0] = radio.SETUP_RETR.byte;
-    data_bytes.data_size = 1;
-    
-    W_Register(SETUP_RETR_ADDR, data_bytes);
+    //RETR    
+    W_Register(SETUP_RETR_ADDR, initDataBytes(1, radio.SETUP_RETR.byte));
     
     radio_setChannel(&radio, 2);
     
-    Activate();
+    radio_clearInterrupts();
     
     Flush_RX();
     
@@ -139,26 +135,39 @@ static void radio_startTx(Radio_t * radio){
 }
 
 void radio_powerUp(Radio_t * radio){
-    DataBytes_t data_bytes;
-    
     radio->NRF_CONFIG.PWR_UP = 1;
-    data_bytes.bytes[0] = radio->NRF_CONFIG.byte;
-    data_bytes.data_size = 1;
     
-    W_Register(NRF_CONFIG_ADDR, data_bytes);
+    W_Register(NRF_CONFIG_ADDR, initDataBytes(1, radio->NRF_CONFIG.byte));
 }
 
+void radio_powerOff(Radio_t * radio){    
+    radio->NRF_CONFIG.PWR_UP = 0;
+    
+    W_Register(NRF_CONFIG_ADDR, initDataBytes(1, radio->NRF_CONFIG.byte));
+}
+
+
 void sendBytes(Radio_t * radio, Payload_t payloadInfo){
-    DataBytes_t dataBytes = initDataBytes(1, 0x70);
+    DataBytes_t status = initDataBytes(1, 0);
     
     //Send Data
-    W_TX_Payload_NO_ACK(payloadInfo);
+    W_TX_Payload(payloadInfo);
     radio_startTx(radio);
-    __delay_us(100);
+    TIMEOUT_TIMER_START();
+    if(!radio->NRF_CONFIG.MASK_TX_DS){
+        while(IRQ_GetValue() && !TIMEOUT_TIMER_IF);
+    }else{
+        while((status.bytes[0]&0x20) != 0x20 && !TIMEOUT_TIMER_IF){
+            R_Register(NRF_STATUS_ADDR, &status);
+        }
+    }
     CE_LOW();
     
-    //Clear interrupts
-    W_Register(NRF_STATUS_ADDR, dataBytes);
+    TIMEOUT_TIMER_STOP();
+    TIMEOUT_TIMER_RELOAD();
+    TIMEOUT_TIMER_IF = 0;
+    
+    radio_clearInterrupts();
     
     Flush_TX();
 }
@@ -191,8 +200,6 @@ bool checkFIFO(Radio_t * radio){
     return data_exists;
 }
 
-void 
-
 Payload_t initPayload(uint8_t size, ...){
     Payload_t payload = {{0x00}, 0x00};
     payload.payload_size = size < 33?size:32;
@@ -221,4 +228,16 @@ DataBytes_t initDataBytes(uint8_t size, ...){
         va_end(arguments);
     }
     return dataBytes;
+}
+
+void radio_clearInterrupts(void){
+    DataBytes_t clearInterrupts = initDataBytes(1, 0x70);
+    
+    //Clear interrupts
+    W_Register(NRF_STATUS_ADDR, clearInterrupts);
+}
+
+void radio_enableTX_DS(Radio_t * radio){
+    radio->NRF_CONFIG.MASK_TX_DS = 0;
+    W_Register(NRF_CONFIG_ADDR, initDataBytes(1, radio->NRF_CONFIG.byte));
 }

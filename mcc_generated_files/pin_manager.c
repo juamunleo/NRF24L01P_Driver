@@ -48,7 +48,7 @@
 
 #include "pin_manager.h"
 #include "tmr3.h"
-
+#include "../main.h"
 
 
 
@@ -109,7 +109,7 @@ void PIN_MANAGER_Initialize(void)
     //interrupt on change for group IOCAN - negative
     IOCANbits.IOCAN4 = 1;
     //interrupt on change for group IOCAP - positive
-    IOCAPbits.IOCAP4 = 1;
+    IOCAPbits.IOCAP4 = 0;
 
 
 

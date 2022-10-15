@@ -1,17 +1,17 @@
 /**
-  TMR3 Generated Driver File
+  TMR5 Generated Driver File
 
   @Company
     Microchip Technology Inc.
 
   @File Name
-    tmr3.c
+    tmr5.c
 
   @Summary
-    This is the generated driver implementation file for the TMR3 driver using PIC10 / PIC12 / PIC16 / PIC18 MCUs
+    This is the generated driver implementation file for the TMR5 driver using PIC10 / PIC12 / PIC16 / PIC18 MCUs
 
   @Description
-    This source file provides APIs for TMR3.
+    This source file provides APIs for TMR5.
     Generation Information :
         Product Revision  :  PIC10 / PIC12 / PIC16 / PIC18 MCUs - 1.81.8
         Device            :  PIC16LF1764
@@ -49,108 +49,108 @@
 */
 
 #include <xc.h>
-#include "tmr3.h"
+#include "tmr5.h"
 
 /**
   Section: Global Variables Definitions
 */
-volatile uint16_t timer3ReloadVal;
+volatile uint16_t timer5ReloadVal;
 
 /**
-  Section: TMR3 APIs
+  Section: TMR5 APIs
 */
 
-void TMR3_Initialize(void)
+void TMR5_Initialize(void)
 {
     //Set the Timer to the options selected in the GUI
 
-    //GSS T3G_pin; TMR3GE disabled; T3GTM disabled; T3GPOL low; T3GGO_nDONE done; T3GSPM disabled; 
-    T3GCON = 0x00;
+    //GSS T5G_pin; TMR5GE disabled; T5GTM disabled; T5GPOL low; T5GGO_nDONE done; T5GSPM disabled; 
+    T5GCON = 0x00;
 
-    //TMR 243; 
-    TMR3H = 0xF3;
+    //TMR 246; 
+    TMR5H = 0xF6;
 
-    //TMR 203; 
-    TMR3L = 0xCB;
+    //TMR 60; 
+    TMR5L = 0x3C;
 
     // Clearing IF flag.
-    PIR4bits.TMR3IF = 0;
+    PIR4bits.TMR5IF = 0;
 	
     // Load the TMR value to reload variable
-    timer3ReloadVal=(uint16_t)((TMR3H << 8) | TMR3L);
+    timer5ReloadVal=(uint16_t)((TMR5H << 8) | TMR5L);
 
-    // CKPS 1:2; nT3SYNC synchronize; CS FOSC/4; TMR3ON enabled; 
-    T3CON = 0x11;
+    // CKPS 1:1; nT5SYNC synchronize; CS FOSC/4; TMR5ON enabled; 
+    T5CON = 0x01;
 }
 
-void TMR3_StartTimer(void)
+void TMR5_StartTimer(void)
 {
     // Start the Timer by writing to TMRxON bit
-    T3CONbits.TMR3ON = 1;
+    T5CONbits.TMR5ON = 1;
 }
 
-void TMR3_StopTimer(void)
+void TMR5_StopTimer(void)
 {
     // Stop the Timer by writing to TMRxON bit
-    T3CONbits.TMR3ON = 0;
+    T5CONbits.TMR5ON = 0;
 }
 
-uint16_t TMR3_ReadTimer(void)
+uint16_t TMR5_ReadTimer(void)
 {
     uint16_t readVal;
     uint8_t readValHigh;
     uint8_t readValLow;
     
 	
-    readValLow = TMR3L;
-    readValHigh = TMR3H;
+    readValLow = TMR5L;
+    readValHigh = TMR5H;
     
     readVal = ((uint16_t)readValHigh << 8) | readValLow;
 
     return readVal;
 }
 
-void TMR3_WriteTimer(uint16_t timerVal)
+void TMR5_WriteTimer(uint16_t timerVal)
 {
-    if (T3CONbits.nT3SYNC == 1)
+    if (T5CONbits.nT5SYNC == 1)
     {
         // Stop the Timer by writing to TMRxON bit
-        T3CONbits.TMR3ON = 0;
+        T5CONbits.TMR5ON = 0;
 
-        // Write to the Timer3 register
-        TMR3H = (uint8_t)(timerVal >> 8);
-        TMR3L = (uint8_t)timerVal;
+        // Write to the Timer5 register
+        TMR5H = (uint8_t)(timerVal >> 8);
+        TMR5L = (uint8_t)timerVal;
 
         // Start the Timer after writing to the register
-        T3CONbits.TMR3ON =1;
+        T5CONbits.TMR5ON =1;
     }
     else
     {
-        // Write to the Timer3 register
-        TMR3H = (uint8_t)(timerVal >> 8);
-        TMR3L = (uint8_t)timerVal;
+        // Write to the Timer5 register
+        TMR5H = (uint8_t)(timerVal >> 8);
+        TMR5L = (uint8_t)timerVal;
     }
 }
 
-void TMR3_Reload(void)
+void TMR5_Reload(void)
 {
-    TMR3_WriteTimer(timer3ReloadVal);
+    TMR5_WriteTimer(timer5ReloadVal);
 }
 
-void TMR3_StartSinglePulseAcquisition(void)
+void TMR5_StartSinglePulseAcquisition(void)
 {
-    T3GCONbits.T3GGO_nDONE = 1;
+    T5GCONbits.T5GGO_nDONE = 1;
 }
 
-uint8_t TMR3_CheckGateValueStatus(void)
+uint8_t TMR5_CheckGateValueStatus(void)
 {
-    return (T3GCONbits.T3GVAL);
+    return (T5GCONbits.T5GVAL);
 }
 
-bool TMR3_HasOverflowOccured(void)
+bool TMR5_HasOverflowOccured(void)
 {
     // check if  overflow has occurred by checking the TMRIF bit
-    return(PIR4bits.TMR3IF);
+    return(PIR4bits.TMR5IF);
 }
 /**
   End of File

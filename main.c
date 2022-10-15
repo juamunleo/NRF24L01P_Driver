@@ -70,10 +70,12 @@ void main(void)
     // Disable the Global Interrupts
     //INTERRUPT_GlobalInterruptDisable();
 
+    //TMR5_StopTimer();
+    //TMR3_StopTimer();
+    
     // Disable the Peripheral Interrupts
     //INTERRUPT_PeripheralInterruptDisable();
-    SPI_Open(SPI_DEFAULT);    
-   
+    SPI_Open(SPI_DEFAULT);
     
 #if RADIO_MODE == RADIO_RX
     rx_function();
@@ -84,7 +86,7 @@ void main(void)
 
 #if RADIO_MODE == RADIO_RX
 void rx_function(void){
-    Payload_t payload = initPayload();
+    Payload_t payload = initPayload(0);
     uint8_t data, ref = 0, lastRef;
     
     Radio_t radio = radio_init();
@@ -124,24 +126,31 @@ void tx_function(void){
     Radio_t radio = radio_init();
     radio_setChannel(&radio, 5);
     radio_openWritingPipe(&radio, initDataBytes(5, 0xEF, 0xAB, 0xC8, 0xF3, 0xD7));
-    radio_powerUp(&radio);
+    radio_openReadingPipe(&radio, 0, 2, initDataBytes(5,0xEF, 0xAB, 0xC8, 0xF3, 0xD7));
+    radio_enableTX_DS(&radio);
+    //radio_powerUp(&radio);
     interrupted = false;
     LED_SetHigh();
     __delay_ms(300);
     LED_SetLow();
     while(1){
         if(interrupted){
-            LED_SetHigh();
+            radio_powerUp(&radio);
             ref++;
             payloadInfo.bytes[1] = ref;
-            while(!BUTTON_GetValue()){ 
+            while(!BUTTON_GetValue()){
+                LED_Toggle();
                 sendBytes(&radio, payloadInfo);
+                __delay_ms(50);
             }
             interrupted = false;
             LED_SetLow();
             __delay_ms(500);
         }
+        radio_powerOff(&radio);
+        SLEEP();
     }
+    
 }
 #endif
 /**

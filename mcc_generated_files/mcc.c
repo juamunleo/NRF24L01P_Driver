@@ -55,12 +55,13 @@ void SYSTEM_Initialize(void)
     OSCILLATOR_Initialize();
     WDT_Initialize();
     TMR3_Initialize();
+    TMR5_Initialize();
 }
 
 void OSCILLATOR_Initialize(void)
 {
-    // SCS FOSC; SPLLEN disabled; IRCF 8MHz_HF; 
-    OSCCON = 0x70;
+    // SCS FOSC; SPLLEN disabled; IRCF 1MHz_HF; 
+    OSCCON = 0x58;
     // SOSCR disabled; 
     OSCSTAT = 0x00;
     // TUN 0; 

@@ -96,13 +96,6 @@ void W_TX_Payload_NO_ACK(Payload_t payload_info){
     SPI_OFF();
 }
 
-void Activate(void){
-    SPI_ON();
-    SPI_EXCHANGE_BYTE(ACTIVATE);
-    SPI_EXCHANGE_BYTE(0x73);
-    SPI_OFF();
-}
-
 void nRF_NOP(void){
     SPI_ON();
     SPI_EXCHANGE_BYTE(0xFF);

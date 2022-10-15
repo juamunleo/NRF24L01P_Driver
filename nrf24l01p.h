@@ -88,7 +88,6 @@ extern "C" {
     void W_ACK_Payload(uint8_t pipe, Payload_t payload_info);
     void W_TX_Payload_NO_ACK(Payload_t payload_info);
     void nRF_NOP(void);
-    void Activate(void);
     
 #ifdef	__cplusplus
 }
